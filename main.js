@@ -50,6 +50,44 @@ function requestCompare(game, msg) {
 }
 
 /**
+ * fonction pour du webscraping
+ * @param {*} game 
+ */
+function requestGuidet(msg) {
+	var gameList;
+
+	gameList = htmlToArrayOfJsonGuidet()
+	DataToembed(gameList, msg);
+
+
+
+
+}
+
+/**
+ * Format les données provenant du webscraping en tableau de Json
+ * @param {*} html 
+ */
+function htmlToArrayOfJsonGuidet() {
+	var newData = new Array();
+
+	var Game = {
+		title : "Apprendre la programmation C++",
+		url : "https://www.elephorm.com/formation/code/c/apprendre-la-programmation-c",
+		price : "79,00€",
+		platform : "[Guidouille](https://www.youtube.com/watch?v=yGVrr_w9MGo)",
+		imgsrc : "https://image-uviadeo.journaldunet.com/image/450/1580203210/1000004.jpg",
+	}
+
+	newData.push(Game);
+
+	console.log(newData);
+
+	return newData;
+
+}
+
+/**
  * Format les données provenant du webscraping en tableau de Json
  * @param {*} html 
  */
@@ -76,6 +114,8 @@ function htmlToArrayOfJson(html) {
 	return newData;
 
 }
+
+
 
 
 /**
@@ -158,9 +198,14 @@ client.on('message', msg => {
 		console.log(args);
 
 		if (!args.length) {
-			msg.channel.send('Rentrer un jeu apres la commande ex: !Price Rust');
-		} else {
+			return msg.channel.send('Rentrer un jeu apres la commande ex: !Price Rust');
+		}
+		
+		if(args == "guidouille") {
 			// msg.channel.send('Le jeu recherché est ' + args);
+			console.log(args);
+			requestGuidet(msg);
+		} else {
 			requestCompare(args, msg);
 		}
 
