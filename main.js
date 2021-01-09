@@ -37,7 +37,7 @@ function requestCompare(game, msg) {
 
 		gameList = htmlToArrayOfJson(data.html())
 
-		DataToembed(gameList, msg);
+		DataToembed(gameList.slice(0, 9), msg);
 
 	})
 	//handling error
