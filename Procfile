@@ -1,1 +1,1 @@
-service: npm main.js
+service: node main.js
