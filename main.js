@@ -80,9 +80,6 @@ function htmlToArrayOfJsonGuidet() {
 	}
 
 	newData.push(Game);
-
-	console.log(newData);
-
 	return newData;
 
 }
