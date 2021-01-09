@@ -4,9 +4,14 @@
   "description": "discord bot that's make request to a website to get price comparaison between website",
   "main": "main.js",
   "dependencies": {
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.5",
+    "discord.js": "^12.5.1",
+    "html-to-json": "^0.6.0",
     "jquery": "^3.5.1",
     "jsdom": "^16.4.0",
-    "discord.js": "^12.5.1"
+    "puppeteer": "^5.5.0",
+    "xmlserializer": "^0.6.1"
   },
   "devDependencies": {},
   "scripts": {

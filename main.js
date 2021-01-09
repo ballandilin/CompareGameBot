@@ -3,6 +3,9 @@ const { Client, MessageEmbed } = require('discord.js');
 const { JSDOM } = require( "jsdom" );
 const { window } = new JSDOM( "" );
 const $ = require( "jquery" )( window );
+const axios = require('axios');
+const cheerio = require('cheerio');
+
 
 
 const client = new Client();
@@ -14,33 +17,93 @@ const {prefix, token} = require('./config.json');
 //////////////////////////////////// Creation de function //////////////////////////
 
 
-function requestCompare(game) {
-	$.ajax({
-		type: "GET",
-		url: "https://www.dlcompare.fr/search?q=" + game,
-		headers: 
-		{ 
-			'Accept': "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-			'Accept-Language': "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
-			'Connection': "Keep-alive",
-			'Cookie' : 'DLCSSID=rb23saa8q7c74d67390dvgu01r; currency=1',
-			'Host' : 'www.dlcompare.fr',
-			'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0'
+/**
+ * fonction pour du webscraping
+ * @param {*} game 
+ */
+function requestCompare(game, msg) {
+	var gameList;
+	axios
+	.get("https://www.dlcompare.fr/search?q=" + game)
+	.then((response) => {
+		//handling the success
+		const html = response.data;
 
-		},
-		success: function(r) {
-		  console.log(r);
-		}
+		//loading response data into a Cheerio instance
+		const $ = cheerio.load(html);
+
+		//selecting the elements with the data
+		const data = $("ul.catalog");
+
+		gameList = htmlToArrayOfJson(data.html())
+
+		DataToembed(gameList, msg);
+
+	})
+	//handling error
+	.catch((error) => {
+	  console.log(error);
 	});
+
+
+
+}
+
+/**
+ * Format les données provenant du webscraping en tableau de Json
+ * @param {*} html 
+ */
+function htmlToArrayOfJson(html) {
+	var newData = new Array();
+
+	var result = html.trim().split("\n");
+	var $;
+
+	result.forEach(element => {
+		$ = cheerio.load(element.trim());
+
+		var Game = {
+			title : $("span.name").text(),
+			price : $("div.catalog-price").first().text(),
+			platform : $("span.catalog-shop-name").text(),
+			imgsrc : $("img.catalog-img").attr("src"),
+		}
+
+		newData.push(Game);
+	});
+
+	return newData;
+
 }
 
 
+/**
+ * Permet de remplir un MessageEmbed avec des données
+ * @param {*} data 
+ */
+function DataToembed(data, msg) {
+	var embedArray = new Array();
+	var embed;
+
+	data.forEach(element => {
+		embed = new MessageEmbed()
+		.setTitle(element.title)
+		.setColor(0xF0B10E)
+		.setImage(element.imgsrc)
+		.addFields(
+			{ name: 'Platforme', value: element.platform, inline: true},
+			{ name: 'Prix', value: element.price, inline: true },
+		)
+		embedArray.push(embed);
+		});
+
+	msg.channel.createWebhook('Resultat', msg.author.displayAvatarURL)
+		.then(w => w.send({ embeds: embedArray }));
+
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////
-
-
-
-
 
 
 
@@ -53,8 +116,6 @@ client.on('ready', () => {
   client.user.setActivity("Compare game price");
 });
 
-//TODO: ajouter un cota de ban random sur une journee
-//TODO : ajouter commande !ban all
 
 client.on('message', msg => {
 	if (!msg.content.startsWith(prefix) || msg.author.bot) return;
@@ -70,13 +131,8 @@ client.on('message', msg => {
 	const command = args.shift().toLowerCase();
 
 
-	const embed = new MessageEmbed()
-	.setTitle('GOOMER!!!')
-	.setColor(0xF0B10E)
 
-	var realMembers = [];
-
-	if (command === 'price') {
+	if (command === 'p') {
 
 		console.log(args);
 
@@ -84,7 +140,7 @@ client.on('message', msg => {
 			msg.channel.send('Rentrer un jeu apres la commande ex: !Price Rust');
 		} else {
 			msg.channel.send('Le jeu recherché est ' + args);
-			requestCompare(args);
+			requestCompare(args, msg);
 		}
 
 	}
