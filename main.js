@@ -64,6 +64,7 @@ function htmlToArrayOfJson(html) {
 
 		var Game = {
 			title : $("span.name").text(),
+			url : $("span.name").text(),
 			price : $("div.catalog-price").first().text(),
 			platform : $("span.catalog-shop-name").text(),
 			imgsrc : $("img.catalog-img").attr("src"),
@@ -84,6 +85,7 @@ function htmlToArrayOfJson(html) {
 function DataToembed(data, msg) {
 	var embedArray = new Array();
 	var embed;
+	deleteWebhook(msg);
 
 	data.forEach(element => {
 		embed = new MessageEmbed()
@@ -98,8 +100,27 @@ function DataToembed(data, msg) {
 		});
 
 	msg.channel.createWebhook('Resultat', msg.author.displayAvatarURL)
-		.then(w => w.send({ embeds: embedArray }));
+		.then(w => w.send({ embeds: embedArray }))
+		.catch();
 
+}
+
+async function deleteWebhook(msg) {
+	const webhooks = await msg.channel.fetchWebhooks();
+	const myWebhooks = webhooks.filter(webhook => webhook.owner.id === client.user.id && webhook.name === 'Resultat');
+
+	try {
+	if (myWebhooks.size === 0) return 0;
+
+	for (let [id, webhook] of myWebhooks) await webhook.delete(`Requested by ${msg.author.tag}`);
+
+	// await msg.channel.send('Successfully deleted all of my Webhooks from that channel.');
+	} catch(err) {
+	console.error(err);
+
+	await msg.channel.send('Un probleme est survenue pendant la suppresion des webhhooks')
+		.catch(console.error);
+	}
 }
 
 
@@ -132,14 +153,14 @@ client.on('message', msg => {
 
 
 
-	if (command === 'p') {
+	if (command === 'pc') {
 
 		console.log(args);
 
 		if (!args.length) {
 			msg.channel.send('Rentrer un jeu apres la commande ex: !Price Rust');
 		} else {
-			msg.channel.send('Le jeu recherché est ' + args);
+			// msg.channel.send('Le jeu recherché est ' + args);
 			requestCompare(args, msg);
 		}
 
