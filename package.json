@@ -1,9 +1,25 @@
-"engines": {
-    "node": "12.x",
-    "npm": "*"
+{
+  "name": "comparegamebot",
+  "version": "1.0.0",
+  "description": "discord bot that's make request to a website to get price comparaison between website",
+  "main": "main.js",
+  "dependencies": {
+    "jquery": "^3.5.1",
+    "jsdom": "^16.4.0",
+    "discord.js": "^12.5.1"
   },
-
+  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node main.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ballandilin/CompareGameBot.git"
+  },
+  "author": "nicolas benoit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ballandilin/CompareGameBot/issues"
+  },
+  "homepage": "https://github.com/ballandilin/CompareGameBot#readme"
+}
