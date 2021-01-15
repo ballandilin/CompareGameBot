@@ -9,6 +9,7 @@ const cheerio = require('cheerio');
 
 
 const client = new Client();
+// rajouter un fichier config.json
 const {prefix, token} = require('./config.json');
 
 
