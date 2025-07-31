@@ -131,16 +131,6 @@ Le bot affiche des logs détaillés dans la console :
 - 🔍 Recherches
 - 📝 Commandes
 
-## 🤝 Contribution
-
-Les contributions sont les bienvenues ! Pour contribuer :
-
-1. Fork le projet
-2. Créer une branche pour votre fonctionnalité (`git checkout -b feature/AmazingFeature`)
-3. Commit vos changements (`git commit -m 'Add some AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrir une Pull Request
-
 ## 📝 Changelog
 
 ### Version 2.0.0 (2025-07-31)
@@ -163,14 +153,3 @@ Ce projet est sous licence ISC. Voir le fichier `package.json` pour plus de dét
 ## 👨‍💻 Auteur
 
 **Nicolas Benoit**
-- GitHub: [@ballandilin](https://github.com/ballandilin)
-
-## 🙏 Remerciements
-
-- [Discord.js](https://discord.js.org/) pour l'excellente documentation
-- [DLCompare](https://www.dlcompare.fr/) pour les données de prix
-- La communauté Discord.js pour le support
-
----
-
-⭐ N'hésitez pas à mettre une étoile si ce projet vous aide !
